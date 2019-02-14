@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<!DOCTYPE html>
+<html>
+  <head>
+    <script type="text/javascript" src="//cdnjs.cloudflare.com/ajax/libs/socket.io/1.3.6/socket.io.min.js"></script>
+
+    <script src="{{ url_for('static', filename='pure.js') }}"></script>
+
+    <title> Dashboard </title>
+  </head>
+  <body>
+      <form class="message">
+        <input type="text" id="input_msg">
+        <input type="text" id="room">
+        <button id="btn-msg">SEND</button>
+      </form>
+
+      <ul id="messages">
+      </ul>
+
+      <select class="list">
+      </select>
+      <input type="text" id="msg_list">
+      <button id="list_btn">Join Group</button>
+
+      <h2>TESTING</h2>
+      
+      <select class="test">
+
+      </select>
+  </body>
+</html>
