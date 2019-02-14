@@ -4,11 +4,13 @@ document.addEventListener('DOMContentLoaded', () => {
   if(!localStorage.getItem('opt_list'))
     (localStorage.setItem('opt_list', 'default'))
 
-  if (!localStorage.getItem('opt_message'))
-      (localStorage.setItem('opt_message', 'default'))
+  if (!localStorage.getItem('ary_message'))
+      (localStorage.setItem('ary_message', 'default'))
 
   var opt_msg = [];
   var opt_r = [];
+  var ary =[];
+  var temp = "";
 
   var socket = io.connect(location.protocol + '//' + document.domain + ':' + location.port);
 
@@ -19,11 +21,11 @@ document.addEventListener('DOMContentLoaded', () => {
       console.log('if unnder' + opt_r);
     };
 
-    if (localStorage.getItem('opt_message') != 'default'){
-      opt_msg = JSON.parse(localStorage.getItem('opt_message'));
-      console.log(opt_msg);
+    if (localStorage.getItem('ary_message') != 'default'){
+      ary = JSON.parse(localStorage.getItem('ary_message'));
+      console.log(ary);
 
-      option_creator(opt_msg, '#messages', 'li');
+      option_creatori(ary, '#messages', 'li');
     };
 
 
@@ -62,21 +64,41 @@ document.addEventListener('DOMContentLoaded', () => {
       const option = document.createElement('option');
       option.innerHTML = user_message.room;
       document.querySelector('.list').append(option);
+
+      // remebering localstorage channel created
+      console.log(user_message.room)
+      opt_r.push(user_message.room);
+      localStorage.setItem('opt_list', JSON.stringify(opt_r))
+      console.log(opt_r)
     }
 
 
     // remembering the message list
     console.log("message: "+ opt_msg);
     opt_msg.push(user_message.message);
+
+    // new feature // temp is doing nothing, right now!
+    if (temp != user_message.room) { // if the room is not already created
+      ary.push({[user_message.room]: opt_msg}); //
+      console.log(ary);
+      console.log("temp: " +temp);
+      localStorage.setItem('ary_message', JSON.stringify(ary));
+    }
+    else { // if the room created go to that room updated the list
+      ary[0][user_message.room] = opt_msg
+    }
+
+
+    temp = user_message.room;
+
+
+
+    //
     localStorage.setItem('opt_message',JSON.stringify(opt_msg));
     console.log("message: "+ opt_msg);
 
 
-    // remebering localstorage channel created
-    console.log(user_message.room)
-    opt_r.push(user_message.room);
-    localStorage.setItem('opt_list', JSON.stringify(opt_r))
-    console.log(opt_r)
+
 
   });
 
@@ -106,11 +128,47 @@ function option_creator (opt_name, aug, type){
 function checker (room_list, room){
   for (i in room_list) {
     if (room_list[i] == room){
-      alert('channel Already Exit');
+      //alert('channel Already Exit');
       return ':P';
     };
   };
 };
+
+function option_creatori (opt_name, aug, type){
+
+  for (i in opt_name){
+    for (j in opt_name[i]){
+      for (k in opt_name[i][j]){
+        console.log("fucnt: "+opt_name[i][j][k]);
+        const option = document.createElement(type);
+        option.innerHTML = opt_name[i][j][k];
+        console.log("func insude: "+ opt_name[i][j][k]);
+        document.querySelector(aug).append(option);
+      };
+
+    };
+
+  };
+};
+// testing the fucntions
+//var room_name = '2';
+//console.log(magic(room_name, ary));
+//console.log(ary.length);
+//console.log("i: " +chicky);
+
+
+  function magic (room_name, core_list){
+    const check = core_list.length;
+    for (i in check){
+      if (Object.keys(core_list[i]) == room_name){
+          console.log(":D");
+      }
+      else{
+          console.log(";)");
+      }
+
+    };
+  };
 
 
 
